@@ -8,16 +8,17 @@
 // module
 const mongoose = require('mongoose');
 const express = require('express');
+const path = require('path');
+const router = require('./router/routeHandler');
 const { errorHandler, notFoundHandler } = require('./common/common');
-// const notFoundHandler = require('notFoundHandler');
-// const errorHandler = require('errorHandler');
 require('dotenv').config();
 const env = require('./assets/configuration');
-
-// app
 const app = express();
+
 app.use(express.json()); // for parsing json data from request
 app.use(express.urlencoded({ extended: true })); // urlencoded request parameters
+app.set('view engine', 'ejs'); // set EJS template engine
+app.use(express.static(path.join(__dirname, 'public'))); // static directory
 
 // connect to the database
 mongoose
@@ -28,6 +29,7 @@ mongoose
 	.catch((err) => console.log(err));
 
 // router export and used
+app.use('', router);
 
 // 404 not found route
 app.use(notFoundHandler);
