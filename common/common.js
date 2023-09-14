@@ -5,15 +5,18 @@
  * *Date: 14-September-2023
  */
 
-function errorHandler(err, req, res, next) {
-	res.json({
-		message: 'this is error',
-	});
+function notFoundHandler(req, res, next) {
+	res.json({ message: 'page not found' });
 }
 
-function notFoundHandler(req, res, next) {
+function errorHandler(err, req, res, next) {
+	// console.loo('error name:', err.name);
+	// console.loo('error message:', err.message);
+	// console.loo('error stack', err.stack);
+	// console.loo('error status code:', err.statusCode);
+
 	res.json({
-		message: 'not found',
+		message: err.message,
 	});
 }
 
