@@ -9,7 +9,6 @@
 const env = require('../assets/configuration');
 
 function notFoundHandler(req, res, next) {
-	res.locals.title = 'page not found';
 	res.render('error');
 }
 
