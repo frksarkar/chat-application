@@ -10,12 +10,13 @@ const express = require('express');
 const loginHandler = require('./loginHandler');
 const userHandler = require('./userHandler');
 const inboxHandler = require('./inboxHandler');
+const decorateHtmlResponse = require('../common/decorateHtmlResponse');
 const router = express.Router();
 
-router.get('/', loginHandler);
+router.get('/', decorateHtmlResponse('login'), loginHandler);
 
-router.get('/inbox', inboxHandler);
+router.get('/inbox', decorateHtmlResponse('inbox'), inboxHandler);
 
-router.get('/users', userHandler);
+router.get('/users', decorateHtmlResponse('user'), userHandler);
 
 module.exports = router;
