@@ -6,6 +6,7 @@
  */
 
 // module exports
+require('dotenv').config();
 
 // application scaffolding configuration
 const isProduction = process.env.NODE_ENV === 'production';

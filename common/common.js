@@ -6,14 +6,24 @@
  */
 
 // module
-const env = require('../assets/configuration');
+const config = require('../assets/configuration');
 
 function notFoundHandler(req, res, next) {
+	res.locals.error = {};
+	res.locals.title = 'page not found';
 	res.render('error');
+	// res.json({ error: 'page not found' });
 }
 
 function errorHandler(err, req, res, next) {
-	res.render('error');
+	res.locals.error = config.server === 'development' ? err : err.message;
+
+	res.status(err.status || 500);
+	if (config.server === 'production') {
+		res.json(err.message);
+	} else {
+		res.render('error', { title: 'error message' });
+	}
 }
 
 module.exports = {

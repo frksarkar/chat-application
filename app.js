@@ -9,9 +9,11 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
-const router = require('./router/routeHandler');
+const loginHandler = require('./router/loginHandler');
+const userHandler = require('./router/userHandler');
+const inboxHandler = require('./router/inboxHandler');
+const decorateHtmlResponse = require('./common/decorateHtmlResponse');
 const { errorHandler, notFoundHandler } = require('./common/common');
-require('dotenv').config();
 const env = require('./assets/configuration');
 const app = express();
 
@@ -29,7 +31,11 @@ mongoose
 	.catch((err) => console.log(err));
 
 // router export and used
-app.use('', router);
+app.get('/', decorateHtmlResponse('login'), loginHandler);
+
+app.get('/inbox', decorateHtmlResponse('inbox'), inboxHandler);
+
+app.get('/users', decorateHtmlResponse('user'), userHandler);
 
 // 404 not found route
 app.use(notFoundHandler);

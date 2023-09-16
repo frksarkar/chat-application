@@ -1,4 +1,8 @@
 <%- include('header') %>
-		<h1> page not found </h1>
+
+		<h1> <%= error.message || null %> </h1>
+		<h1> <%= error.status || title || null  %> </h1>
+		<h1> <%= error.stack || null %>   </h1>
+
 	</body>
 </html>
