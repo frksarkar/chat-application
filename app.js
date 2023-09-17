@@ -31,11 +31,11 @@ mongoose
 	.catch((err) => console.log(err));
 
 // router export and used
-app.get('/', decorateHtmlResponse('login'), loginHandler);
+app.use('/', loginHandler);
 
-app.get('/inbox', decorateHtmlResponse('inbox'), inboxHandler);
+app.use('/inbox', inboxHandler);
 
-app.get('/users', decorateHtmlResponse('user'), userHandler);
+app.use('/users', userHandler);
 
 // 404 not found route
 app.use(notFoundHandler);
