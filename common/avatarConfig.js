@@ -1,0 +1,45 @@
+/**
+ * *Title: avatar image
+ * ?description: avatar image configuration and store the DB
+ * @author: Faruk_sarkar
+ * *Date: 19-September-2023
+ */
+
+// external module imports
+const path = require('path');
+const multer = require('multer');
+const createError = require('http-errors');
+
+function avatar(directory, maxSize, fileFormat, massage) {
+	const dirLink = path.join(__dirname, directory);
+
+	const storage = multer.diskStorage({
+		destination: (req, file, callback) => {
+			callback(null, dirLink);
+		},
+		filename: (req, file, callback) => {
+			const fileName = Date.now() + '-' + file.originalname;
+			callback(null, fileName);
+		},
+	});
+
+	const upload = multer({
+		storage: storage,
+		maxSize: maxSize,
+		fileFilter: (req, file, callback) => {
+			const mineType = fileFormat.includes(
+				file.mimetype.toLocaleLowerCase()
+			);
+
+			if (mineType) {
+				callback(null, true);
+			} else {
+				callback(createError(massage));
+			}
+		},
+	});
+
+	return upload;
+}
+
+module.exports = avatar;

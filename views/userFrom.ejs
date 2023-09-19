@@ -1,0 +1,61 @@
+<div class="modal-wrapper" id="add-user-modal">
+	<div class="modal">
+		<a href="#" onclick="closeModal()" class="modal-close">+</a>
+		<div class="modal-title">
+			<h2>Create New User</h2>
+		</div>
+		<div class="modal-body">
+			<form
+				method="post"
+				action="/users"
+				enctype="multipart/form-data"
+				id="add-user-form"
+			>
+				<input type="text" placeholder="enter name" name="name" />
+				<p class="error show">This is error</p>
+				<input type="text" placeholder="enter email" name="email" />
+				<input type="text" placeholder="enter mobile" name="mobile" />
+				<input
+					type="password"
+					placeholder="enter password"
+					name="password"
+				/>
+				<input type="file" name="avatar" />
+				<input type="submit" value="Submit" />
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	const modal = document.querySelector('#add-user-modal');
+	function closeModal() {
+		modal.style.display = 'none';
+	}
+	function openModal() {
+		modal.style.display = 'block';
+	}
+
+	document
+		.querySelector('#add-user-form')
+		.addEventListener('submit', async function (event) {
+			event.preventDefault();
+
+			const formElement = document.querySelector('#add-user-form');
+			const formData = new FormData(formElement);
+
+			try {
+				const response = await fetch('http://localhost:3000/users', {
+					method: 'POST',
+					body: formData,
+				});
+
+				if (!response.ok) {
+					throw new Error('network response was not ok');
+				}
+				let result = await response.json();
+				console.log(result);
+			} catch (error) {
+				console.log('Error', error);
+			}
+		});
+</script>
