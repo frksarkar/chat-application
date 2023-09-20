@@ -6,15 +6,15 @@
  */
 
 // external module imports
-const path = require('path');
 const multer = require('multer');
 const createError = require('http-errors');
 
-function avatar(directory, maxSize, fileFormat, massage) {
-	const dirLink = path.join(__dirname, directory);
+function avatarUpload(directory, maxSize, fileFormat, massage) {
+	const dirLink = `${__dirname}/../public/${directory}`;
 
 	const storage = multer.diskStorage({
 		destination: (req, file, callback) => {
+			console.log(dirLink);
 			callback(null, dirLink);
 		},
 		filename: (req, file, callback) => {
@@ -27,9 +27,8 @@ function avatar(directory, maxSize, fileFormat, massage) {
 		storage: storage,
 		maxSize: maxSize,
 		fileFilter: (req, file, callback) => {
-			const mineType = fileFormat.includes(
-				file.mimetype.toLocaleLowerCase()
-			);
+			const regex = /[^\/]+(?=\w*)$/;
+			const mineType = fileFormat.includes(file.mimetype.match(regex)[0]);
 
 			if (mineType) {
 				callback(null, true);
@@ -42,4 +41,4 @@ function avatar(directory, maxSize, fileFormat, massage) {
 	return upload;
 }
 
-module.exports = avatar;
+module.exports = avatarUpload;

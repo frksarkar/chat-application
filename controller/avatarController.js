@@ -1,8 +1,8 @@
 // module import
-const avatar = require('../common/avatarConfig');
+const avatarUpload = require('../common/avatarConfig');
 
 function getAvatar(req, res, next) {
-	const upload = avatar(
+	const upload = avatarUpload(
 		'avatar',
 		1024,
 		['jpg', 'jpeg', 'png'],
@@ -13,13 +13,10 @@ function getAvatar(req, res, next) {
 		if (err) {
 			return res.status(500).json({ error: err.massage });
 		}
-		res.json({
-			massage: {
-				fileUploaded: 'file upload successfully',
-			},
-		});
-		// next();
+		next();
 	});
+
+	return upload.any();
 }
 
 module.exports = getAvatar;
