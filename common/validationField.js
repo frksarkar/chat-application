@@ -1,4 +1,5 @@
 const { check, validationResult } = require('express-validator');
+const fs = require('fs');
 const createError = require('http-errors');
 const User = require('../model/userSchema');
 
@@ -17,7 +18,6 @@ const validationField = [
 			if (!user) {
 				return true;
 			}
-			console.log(user);
 			throw createError('email address already exists');
 		}),
 	check('mobile')
@@ -32,9 +32,24 @@ const validationField = [
 
 const userValidation = (req, res, next) => {
 	const result = validationResult(req);
-	const err = result.formatWith((error) => error.msg);
-	if (err.length != 0) {
+	const err = result.mapped();
+	const errorListLength = Object.values(err).length;
+
+	if (errorListLength === 0) {
 		next();
+	} else {
+		if (req.files.length > 0) {
+			const path = req.files[0].path;
+
+			fs.unlink(path, function (err) {
+				if (!err) {
+					console.log('file removed successfully');
+				}
+				console.log(err);
+			});
+		}
+
+		res.status(400).json({ error: err });
 	}
 };
 
