@@ -14,7 +14,6 @@ function avatarUpload(directory, maxSize, fileFormat, massage) {
 
 	const storage = multer.diskStorage({
 		destination: (req, file, callback) => {
-			console.log(dirLink);
 			callback(null, dirLink);
 		},
 		filename: (req, file, callback) => {
