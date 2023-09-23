@@ -15,7 +15,7 @@ const app = {
 	dbUri: isProduction ? 'localhost' : process.env.DB_HOST,
 	server: isProduction ? process.env.NODE_ENV : 'development',
 	port: isProduction ? 5000 : process.env.SERVER_PORT,
-	saltRounds: process.env.SALT_ROUNDS,
+	saltRounds: Number(process.env.SALT_ROUNDS),
 };
 
 // export this scaffold
