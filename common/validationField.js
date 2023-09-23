@@ -21,7 +21,7 @@ const validationField = [
 			throw createError('email address already exists');
 		}),
 	check('mobile')
-		.isMobilePhone('bn-BD')
+		.isMobilePhone('bn-BD', { strictMode: true })
 		.withMessage('phone number is not valid'),
 	check('password')
 		.isStrongPassword()
@@ -48,8 +48,7 @@ const userValidation = (req, res, next) => {
 				console.log(err);
 			});
 		}
-
-		res.status(400).json({ error: err });
+		res.status(500).json({ error: err });
 	}
 };
 

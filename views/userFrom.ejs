@@ -11,15 +11,23 @@
 				enctype="multipart/form-data"
 				id="add-user-form"
 			>
-				<input type="text" placeholder="enter name" name="name" />
+				<input
+					class="show"
+					type="text"
+					placeholder="enter name"
+					name="name"
+				/>
 				<p class="error show">This is error</p>
 				<input type="text" placeholder="enter email" name="email" />
+				<p class="error show">This is error</p>
 				<input type="text" placeholder="enter mobile" name="mobile" />
+				<p class="error show">This is error</p>
 				<input
 					type="password"
 					placeholder="enter password"
 					name="password"
 				/>
+				<p class="error show">This is error</p>
 				<input type="file" name="avatar" />
 				<input type="submit" value="Submit" />
 			</form>
@@ -43,18 +51,15 @@
 			const formElement = document.querySelector('#add-user-form');
 			const formData = new FormData(formElement);
 
-			try {
-				const response = await fetch('http://localhost:3000/users', {
-					method: 'POST',
-					body: formData,
-				});
+			const response = await fetch('http://localhost:3000/users', {
+				method: 'POST',
+				body: formData,
+			});
 
-				if (!response.ok) {
-					throw new Error('network response was not ok');
-				}
-				let result = await response.json();
-			} catch (error) {
-				console.log(error);
+			const result = await response.json();
+			console.log(result.userInfo);
+			if (result.error) {
+				console.log(result.error);
 			}
 		});
 </script>
