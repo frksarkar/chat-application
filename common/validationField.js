@@ -40,10 +40,9 @@ const userValidation = (req, res, next) => {
 	} else {
 		if (req.files.length > 0) {
 			const path = req.files[0].path;
-
 			fs.unlink(path, function (err) {
 				if (!err) {
-					console.log('file removed successfully');
+					return console.log('file removed successfully');
 				}
 				console.log(err);
 			});
