@@ -24,15 +24,21 @@
             </tr>
           </thead>
           <tbody id="users-table">
-            <tr id="">
-              <td class="name">
-                <img src="./images/user1.png" />
-                <span>User 1</span>
-              </td>
-              <td>email@email.com</td>
-              <td class="manage">
-                <img src="./images/trash.png" alt="Delete" />
-              </td>
+            <% for(let user of users) { %>
+              <tr id="<%= user._id %>">
+                <td class="name">
+                  <% if(user.avatar) { %>
+                  <img src="./avatar/<%= user.avatar %>" />
+                  <% } else { %>
+                    <img src="./images/nophoto.png" />
+                      <% } %>
+                  <span><%= user.name %></span>
+                </td>
+                <td><%= user.email %></td>
+                <td class="manage">
+                  <img src="./images/trash.png" alt="Delete" onclick="removeUser('<%= user._id %>')" />
+                </td>
+              <% }; %>
             </tr>
           </tbody>
         </table>
@@ -40,5 +46,32 @@
     </div>
 
     <%- include('./userFrom') %>
+    <script>
+
+      const deleteToast = Toastify({
+        text: "User was deleted successfully",
+        duration: 3000,
+      });
+
+      const deleteErrorToast = Toastify({
+        text: 'Could not delete the user!',
+        duration: 3000,
+      })
+
+      async function removeUser(userId) {
+        const response = await fetch(`http://localhost:3000/users/${userId}`,{
+          method: 'DELETE'
+        })
+        const result = await response.json();
+
+        if(result.error){
+          deleteErrorToast.showToast();
+        }else{
+          document.getElementById(userId).remove();
+          deleteToast.showToast();
+        }
+      }
+
+    </script>
   </body>
 </html>
