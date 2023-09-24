@@ -26,13 +26,14 @@ const userSchema = mongoose.Schema(
 			type: 'String',
 			require: true,
 		},
+		avatar: String,
 	},
 	{ timestamps: true }
 );
 
 // Create a Mongoose model
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('People', userSchema);
 
 // export
 module.exports = User;
