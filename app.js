@@ -12,7 +12,7 @@ const path = require('path');
 const loginHandler = require('./router/loginHandler');
 const userHandler = require('./router/userHandler');
 const inboxHandler = require('./router/inboxHandler');
-const { errorHandler, notFoundHandler } = require('./common/common');
+const { errorHandler, notFoundHandler } = require('./middleware/common/common');
 const env = require('./assets/configuration');
 const app = express();
 
