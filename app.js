@@ -14,10 +14,13 @@ const userHandler = require('./router/userHandler');
 const inboxHandler = require('./router/inboxHandler');
 const { errorHandler, notFoundHandler } = require('./middleware/common/common');
 const env = require('./assets/configuration');
+const cookieParser = require('cookie-parser');
+const config = require('./assets/configuration');
 const app = express();
 
 app.use(express.json()); // for parsing json data from request
 app.use(express.urlencoded({ extended: true })); // urlencoded request parameters
+app.use(cookieParser(config.cookieSecretKey));
 app.set('view engine', 'ejs'); // set EJS template engine
 app.use(express.static(path.join(__dirname, 'public'))); // static directory
 
