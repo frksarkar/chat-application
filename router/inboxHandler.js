@@ -3,10 +3,11 @@ const express = require('express');
 
 // internal module import
 const getInbox = require('../controller/inboxController');
-const decorateHtmlResponse = require('../common/decorateHtmlResponse');
+const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse');
+const { checkLogin } = require('../middleware/login/checkLogin');
 const router = express.Router();
 
 // index page
-router.get('/', decorateHtmlResponse('inbox'), getInbox);
+router.get('/', decorateHtmlResponse('inbox'), checkLogin, getInbox);
 
 module.exports = router;

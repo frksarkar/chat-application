@@ -1,5 +1,5 @@
 // module import
-const avatarUpload = require('../common/avatarConfig');
+const avatarUpload = require('../middleware/common/avatarConfig');
 
 function getAvatar(req, res, next) {
 	const upload = avatarUpload(

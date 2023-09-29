@@ -4,16 +4,17 @@ const express = require('express');
 // internal module imports
 const { getUser, removeUser } = require('../controller/usersController');
 // const config = require('../assets/configuration');
-const decorateHtmlResponse = require('../common/decorateHtmlResponse');
+const decorateHtmlResponse = require('../middleware/common/decorateHtmlResponse');
 const getAvatar = require('../controller/avatarController');
 const {
 	validationField,
 	userValidation,
-} = require('../common/validationField');
+} = require('../middleware/common/validationField');
 const addUser = require('../controller/user/addUser');
+const { checkLogin } = require('../middleware/login/checkLogin');
 const router = express.Router();
 
-router.get('/', decorateHtmlResponse('User'), getUser);
+router.get('/', decorateHtmlResponse('User'), checkLogin, getUser);
 
 router.post('/', getAvatar, validationField, userValidation, addUser);
 

@@ -5,7 +5,7 @@ const config = require('../../assets/configuration');
 const addUser = async (req, res) => {
 	const user = {
 		...req.body,
-		avatar: req.files[0] ? req.files[0].filename : undefined,
+		avatar: req.files[0] ? req.files[0].filename : null,
 	};
 	const bcryptPassword = await bcrypt.hash(user.password, config.saltRounds);
 	user.password = bcryptPassword;
