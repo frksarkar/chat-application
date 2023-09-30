@@ -6,13 +6,13 @@ const checkLogin = function (req, res, next) {
 	const cookie = req.signedCookies
 		? req.signedCookies[config.cookieName]
 		: null;
+
 	try {
 		if (cookie) {
 			const decoded = jwt.verify(cookie, config.jwtSecretKey);
 			if (res.locals.html) {
 				res.locals.userInfo = decoded;
 			}
-
 			next();
 		} else {
 			res.redirect('/');
@@ -30,7 +30,7 @@ const redirectLoggedIn = function (req, res, next) {
 		if (!cookie) {
 			next();
 		} else {
-			res.redirect('inbox');
+			res.redirect('/inbox');
 		}
 	} catch (error) {
 		console.log(error);

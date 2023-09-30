@@ -1,5 +1,4 @@
 const { check, validationResult } = require('express-validator');
-const config = require('../../assets/configuration');
 
 const fieldValidations = [
 	check('username')

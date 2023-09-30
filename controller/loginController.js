@@ -21,7 +21,6 @@ async function login(req, res, next) {
 				req.body.password,
 				user.password
 			);
-			console.log(isValidPassword, req.body.password);
 
 			if (isValidPassword) {
 				const payload = {
@@ -63,4 +62,9 @@ async function login(req, res, next) {
 	}
 }
 
-module.exports = { getLogin, login };
+function logout(req, res, next) {
+	res.clearCookie(config.cookieName);
+	res.send('Cookie deleted');
+}
+
+module.exports = { getLogin, login, logout };
