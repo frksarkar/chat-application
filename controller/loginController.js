@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 function getLogin(req, res) {
-	res.locals.username = req.body.username || '';
+	res.locals.username = '' && req.body.username;
 	res.render('index');
 }
 
@@ -42,8 +42,7 @@ async function login(req, res, next) {
 					httpOnly: true,
 				});
 
-				res.locals.userInfo = payload;
-
+				res.locals.loggedInUser = payload;
 				res.render('inbox');
 			} else {
 				throw createError('user not found');
@@ -53,7 +52,7 @@ async function login(req, res, next) {
 		}
 	} catch (error) {
 		res.render('index', {
-			error: {
+			errors: {
 				common: {
 					message: error.message,
 				},

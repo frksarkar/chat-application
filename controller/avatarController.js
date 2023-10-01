@@ -3,7 +3,7 @@ const avatarUpload = require('../middleware/common/avatarConfig');
 
 function getAvatar(req, res, next) {
 	const upload = avatarUpload(
-		'avatar',
+		'avatars',
 		1024,
 		['jpg', 'jpeg', 'png'],
 		'only jpeg and png files are allowed'
