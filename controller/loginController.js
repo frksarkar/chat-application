@@ -10,7 +10,7 @@ function getLogin(req, res) {
 }
 
 // do login
-async function login(req, res, next) {
+async function login(req, res) {
 	try {
 		const user = await User.findOne({
 			$or: [{ email: req.body.username }, { mobile: req.body.username }],
@@ -21,12 +21,13 @@ async function login(req, res, next) {
 				req.body.password,
 				user.password
 			);
-
 			if (isValidPassword) {
 				const payload = {
-					name: user.name,
+					userId: user._id,
+					username: user.name,
 					email: user.email,
 					mobile: user.mobile,
+					avatar: user.avatar,
 					role: user.role,
 				};
 

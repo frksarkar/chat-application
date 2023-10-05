@@ -10,8 +10,10 @@ const checkLogin = function (req, res, next) {
 	try {
 		if (cookie) {
 			const decoded = jwt.verify(cookie, config.jwtSecretKey);
+			req.user = decoded;
+
 			if (res.locals.html) {
-				res.locals.userInfo = decoded;
+				res.locals.loggedInUser = decoded;
 			}
 			next();
 		} else {

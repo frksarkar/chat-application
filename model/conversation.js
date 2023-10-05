@@ -7,18 +7,18 @@ const ConversationSchema = mongoose.Schema(
 			name: String,
 			avatar: String,
 		},
-		participate: {
+		participant: {
 			id: mongoose.Types.ObjectId,
 			name: String,
 			avatar: String,
 		},
-		last_time: {
+		last_updated: {
 			type: Date,
 			default: Date.now(),
 		},
 	},
 	{
-		timestamp: true,
+		timestamps: true,
 	}
 );
 

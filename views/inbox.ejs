@@ -6,11 +6,12 @@
       </div>
       <div id="conversation-list">
         <% data.forEach(function(conversation) { %>
+
           <!-- conversation creator is same to logged in user, so we need to show participant name and avatar -->
-          <% if(conversation.creator.id == loggedInUser.userid) { %>
+          <% if(conversation.creator.id == loggedInUser.userId) { %>
             <div class="conversation" onclick="getMessages('<%= conversation._id %>', '<%= conversation.participant.name %>')">
-              <% if (conversation.participant.avatar) { %>
-              <img src="./uploads/avatars/<%= conversation.participant.avatar %>" alt="<%= conversation.participant.name %>" />
+              <% if (conversation.participant.avatar !== 'null') { %>
+              <img src="./avatars/<%= conversation.participant.avatar %>" alt="<%= conversation.participant.name %>" />
               <% } else { %>
                 <img src="./images/nophoto.png" />
               <% } %>
@@ -19,8 +20,8 @@
             </div>
           <% } else { %>
             <div class="conversation" onclick="getMessages('<%= conversation._id %>', '<%= conversation.creator.name %>')">
-              <% if (conversation.creator.avatar) { %>
-              <img src="./uploads/avatars/<%= conversation.creator.avatar %>" alt="<%= conversation.creator.name %>" />
+              <% if (conversation.creator.avatar !== 'null') { %>
+              <img src="./avatars/<%= conversation.creator.avatar %>" alt="<%= conversation.creator.name %>" />
               <% } else { %>
                 <img src="./images/nophoto.png" />
               <% } %>
@@ -68,7 +69,7 @@
       const form = document.querySelector('#chat-form');
       const messageContainer = document.querySelector('#chat-message-list');
       const chatTitleContainer = document.querySelector('#conversation-partner');
-      const loggedinUserId = '<%= loggedInUser.userid %>';
+      const loggedInUserId = '<%= loggedInUser.userId %>';
       const loggedinUserName = '<%= loggedInUser.username %>';
       let participant = null; // selected conversation participant object
       let current_conversation_id; // selected conversation id
@@ -81,16 +82,16 @@
         // only respond if current conversation is open in any client
         if(data.message.conversation_id == current_conversation_id) {
           // message class
-          const messageClass = data.message.sender.id === loggedinUserId ? 'you-message' : 'other-message';
+          const messageClass = data.message.sender.id === loggedInUserId ? 'you-message' : 'other-message';
           
-          const senderAvatar = data.message.sender.avatar ? `<img src="./uploads/avatars/${data.message.sender.avatar}" alt="${data.message.sender.name}" />` : `<img src="./images/nophoto.png" alt="${data.message.sender.name}" />`;
+          const senderAvatar = data.message.sender.avatar ? `<img src="./avatars/${data.message.sender.avatar}" alt="${data.message.sender.name}" />` : `<img src="./images/nophoto.png" alt="${data.message.sender.name}" />`;
 
           // message attachments
           let attachments = '<div class="attachments">';
 
           if(data.message.attachment && data.message.attachment.length > 0) {
             data.message.attachment.forEach(attachment => {
-              attachments += `<img src="./uploads/attachments/${attachment}" /> `;
+              attachments += `<img src="./attachments/${attachment}" /> `;
             });
           }
 
@@ -99,7 +100,7 @@
           let messageHTML;
 
           // do not show avatar for loggedin user
-          if(data.message.sender.id == loggedinUserId) {
+          if(data.message.sender.id == loggedInUserId) {
             messageHTML = `<div class="message-row ${messageClass}"><div class="message-content">
               <div class="message-text">${data.message.message}</div>
               ${attachments}
@@ -146,8 +147,8 @@
               if(data.messages.length > 0) {
                 data.messages.forEach((message) => {
                   let senderAvatar = message.sender.avatar ? `./uploads/avatars/${message.sender.avatar}` : './images/nophoto.png';
-                  const messageClass = message.sender.id === loggedinUserId ? 'you-message' : 'other-message';
-                  const showAvatar = message.sender.id === loggedinUserId ? '' : `<img src="${senderAvatar}" alt="${message.sender.name}" />`;
+                  const messageClass = message.sender.id === loggedInUserId ? 'you-message' : 'other-message';
+                  const showAvatar = message.sender.id === loggedInUserId ? '' : `<img src="${senderAvatar}" alt="${message.sender.name}" />`;
 
                   // message attachments
                   let attachments = '<div class="attachments">';

@@ -34,7 +34,6 @@ const userValidation = function (req, res, next) {
 	const result = validationResult(req);
 	const err = result.mapped();
 	const errorListLength = Object.values(err).length;
-
 	if (errorListLength === 0) {
 		next();
 	} else {
