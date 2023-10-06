@@ -1,4 +1,5 @@
 const Conversation = require('../model/conversation');
+const Message = require('../model/messages');
 const users = require('../model/userSchema');
 const escape = require('../utility/escape');
 const moment = require('moment');
@@ -69,4 +70,77 @@ async function addConversation(req, res) {
 	}
 }
 
-module.exports = { getInbox, searchUser, addConversation };
+async function getMessage(req, res) {
+	try {
+		const messages = await Message.find({
+			conversation_id: req.params.conversation_id,
+		}).sort('-createdAt');
+
+		const { participant } = await Conversation.findById(
+			req.params.conversation_id
+		);
+
+		res.json({
+			data: {
+				messages,
+				participant,
+			},
+			user: req.user.userId,
+			conversation_id: req.params.conversation_id,
+		});
+	} catch (error) {
+		res.json({
+			error: {
+				common: {
+					msg: error,
+				},
+			},
+		});
+	}
+}
+
+async function sendMessages(req, res) {
+	if (req.body.message || (req.files && req.files.length > 0)) {
+		let attachments = null;
+
+		if (req.files && req.files.length > 0) {
+			attachments = [];
+			req.files.forEach((file) => {
+				attachments.push(file.filename);
+			});
+		}
+		const newMessage = new Message({
+			text: req.body.message,
+			attachment: attachments,
+			sender: {
+				id: req.user.userId,
+				name: req.user.username,
+				avatar: req.user.avatar,
+			},
+			receiver: {
+				id: req.body.receiverId,
+				name: req.body.receiverName,
+				avatar: req.body.avatar,
+			},
+			conversation_id: req.body.conversationId,
+		});
+
+		console.log(newMessage);
+		const result = await newMessage.save();
+
+		// emit socket event
+		global.io.emit('new_message', result);
+
+		res.status(200).json({
+			message: 'Successful!',
+		});
+	}
+}
+
+module.exports = {
+	getInbox,
+	searchUser,
+	addConversation,
+	getMessage,
+	sendMessages,
+};
