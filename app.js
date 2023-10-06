@@ -17,6 +17,12 @@ const env = require('./assets/configuration');
 const cookieParser = require('cookie-parser');
 const config = require('./assets/configuration');
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+
+// socket connection
+const io = require('socket.io')(server);
+global.io = io;
 
 app.use(express.json()); // for parsing json data from request
 app.use(express.urlencoded({ extended: true })); // urlencoded request parameters

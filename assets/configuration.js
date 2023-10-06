@@ -20,6 +20,7 @@ const config = {
 	jwtExpireSecond: process.env.JWT_EXPIRE_SECONDS,
 	cookieName: process.env.COOKIE_NAME,
 	cookieSecretKey: process.env.COOKIE_SECRET_KEY,
+	appUrl: process.env.APP_URL,
 };
 
 // export this scaffold
