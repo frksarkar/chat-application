@@ -75,8 +75,7 @@
       let current_conversation_id; // selected conversation id
 
       // socket initialization
-      const socket = io('<%= process.env.APP_URL %>');
-
+      const socket = io('<%= appUrl %>');
       // handle new/live incoming message from socket
       socket.on("new_message", data => {
         // only respond if current conversation is open in any client
@@ -122,7 +121,6 @@
 
       // get messages of a conversation
       async function getMessages(conversation_id, current_conversation_name){
-
         // messages failure toast
         const messagesFailureToast = Toastify({
           text: "Error loading messages!",
@@ -146,7 +144,7 @@
 
               if(data.messages.length > 0) {
                 data.messages.forEach((message) => {
-                  let senderAvatar = message.sender.avatar ? `./uploads/avatars/${message.sender.avatar}` : './images/nophoto.png';
+                  let senderAvatar = message.sender.avatar ? `./avatars/${message.sender.avatar}` : './images/nophoto.png';
                   const messageClass = message.sender.id === loggedInUserId ? 'you-message' : 'other-message';
                   const showAvatar = message.sender.id === loggedInUserId ? '' : `<img src="${senderAvatar}" alt="${message.sender.name}" />`;
 

@@ -10,7 +10,7 @@ const multer = require('multer');
 const createError = require('http-errors');
 
 function avatarUpload(directory, maxSize, fileFormat, massage) {
-	const dirLink = `${__dirname}/../public/${directory}`;
+	const dirLink = `${__dirname}/../../public/${directory}`;
 
 	const storage = multer.diskStorage({
 		destination: (req, file, callback) => {
