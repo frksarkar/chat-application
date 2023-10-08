@@ -125,16 +125,36 @@ async function sendMessages(req, res) {
 			conversation_id: req.body.conversationId,
 		});
 
-		console.log(newMessage);
 		const result = await newMessage.save();
 
 		// emit socket event
-		global.io.emit('new_message', result);
-
+		global.io.emit('new_message', {
+			message: {
+				conversation_id: req.body.conversationId,
+				sender: {
+					id: req.user.userId,
+					name: req.user.username,
+					avatar: req.user.avatar,
+				},
+				message: req.body.message,
+				attachment: attachments,
+				date_time: result.date_time,
+			},
+		});
 		res.status(200).json({
 			message: 'Successful!',
 		});
 	}
+}
+
+async function deleteConversation(req, res) {
+	await Conversation.findByIdAndDelete(req.params.conversation_id);
+
+	await Message.deleteMany({
+		conversation_id: req.params.conversation_id,
+	});
+
+	res.status(200).send('conversation deleted successfully');
 }
 
 module.exports = {
@@ -143,4 +163,5 @@ module.exports = {
 	addConversation,
 	getMessage,
 	sendMessages,
+	deleteConversation,
 };
