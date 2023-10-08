@@ -224,10 +224,21 @@ input[type='submit']:active {
 	align-items: center;
 }
 
-.search_users .avatar img,
-.find-users .avatar img {
+.search_users .avatar img {
 	width: 24px;
 	height: 24px;
+}
+.find-users .avatar img {
+	width: 30px;
+	height: 30px;
+	border: 2px solid gray;
+	border-radius: 15px;
+}
+
+.find-users .username {
+	color: white;
+	padding-left: 10px;
+	font-size: 15px;
 }
 
 /* modal related responsive styles */
