@@ -6,6 +6,7 @@
  */
 
 // module
+const http = require('http');
 const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
@@ -16,13 +17,16 @@ const { errorHandler, notFoundHandler } = require('./middleware/common/common');
 const env = require('./assets/configuration');
 const cookieParser = require('cookie-parser');
 const config = require('./assets/configuration');
+const { Server } = require('socket.io');
 const app = express();
-const http = require('http');
 const server = http.createServer(app);
 
 // socket connection
-const io = require('socket.io')(server);
+const io = new Server(server);
 global.io = io;
+io.on('connection', (socket) => {
+	console.log('a user connected:');
+});
 
 app.use(express.json()); // for parsing json data from request
 app.use(express.urlencoded({ extended: true })); // urlencoded request parameters
@@ -52,7 +56,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // server
-app.listen(env.port, function (error) {
+server.listen(env.port, function (error) {
 	if (error) {
 		console.log('error listening server');
 	} else {
