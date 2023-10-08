@@ -157,6 +157,28 @@ async function deleteConversation(req, res) {
 	res.status(200).send('conversation deleted successfully');
 }
 
+async function search(req, res) {
+	const nameSearch = new RegExp(escape(req.body.user), 'i');
+	const conversation = await Conversation.find({
+		$or: [
+			{ 'creator.name': nameSearch },
+			{ 'participant.name': nameSearch },
+		],
+	});
+
+	if (conversation.length > 0) {
+		res.status(200).json({
+			users: conversation,
+		});
+	} else {
+		res.status(404).json({
+			error: {
+				msg: 'user not found',
+			},
+		});
+	}
+}
+
 module.exports = {
 	getInbox,
 	searchUser,
@@ -164,4 +186,5 @@ module.exports = {
 	getMessage,
 	sendMessages,
 	deleteConversation,
+	search,
 };

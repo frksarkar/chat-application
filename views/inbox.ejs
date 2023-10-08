@@ -3,6 +3,7 @@
     <div id="chat-container">
       <div id="search-container">
         <input type="text" placeholder="Search" />
+        <div class="find-users">hello</div>
       </div>
       <div id="conversation-list">
         <% data.forEach(function(conversation) { %>
@@ -67,11 +68,14 @@
     <script>
 
       const form = document.querySelector('#chat-form');
+      const searchUserName = document.querySelector('#search-container input');
+      const findUsersElement = document.querySelector('#search-container .find-users');
       const deleteConversation = document.querySelector('img[alt="Delete Conversation"]')
       const messageContainer = document.querySelector('#chat-message-list');
       const chatTitleContainer = document.querySelector('#conversation-partner');
       const loggedInUserId = '<%= loggedInUser.userId %>';
       const loggedinUserName = '<%= loggedInUser.username %>';
+      let typingTimerId;
       let participant = null; // selected conversation participant object
       let current_conversation_id; // selected conversation id
 
@@ -128,6 +132,12 @@
           text: "Error loading messages!",
           duration: 1000,
         });
+
+        // if the search user show and the input value is not empty then close the user search element
+        if(searchUserName.value){
+          searchUserName.value = '';
+          findUsersElement.style.display = 'none';
+        }
 
         let response = await fetch(`/inbox/messages/${conversation_id}`);
         const result= await response.json();
@@ -233,7 +243,68 @@
         }, 1000);
 
       }
+
+      searchUserName.addEventListener('keyup', () => {
+        clearInterval(typingTimerId)
+
+        if(searchUserName.value) {
+          typingTimerId = setTimeout(findUser, doneTypingInterval)
+        }
+      }) 
+
+      searchUserName.addEventListener('keydown', () => {
+        clearInterval(typingTimerId);
+      })
       
+    async function findUser(){
+      let response = await fetch('/inbox/user/search', {
+			method: 'POST',
+			body: JSON.stringify({
+				user: searchUserName.value,
+			}),
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+			},
+
+      })
+		let result = await response.json();
+
+      if(!result.error){
+        let generatedHtml = '<ul>';
+        result.users.forEach((user) => {
+          const participantId = user.participant.id;
+          if(participantId != loggedInUserId){
+            const avatar = user.participant.avatar
+            ? './avatars/' + user.participant.avatar
+            : './images/nophoto.png';
+          generatedHtml += `<li onclick="getMessages('${user._id}', '${user.participant.name}')">
+              <div class="user">
+                <div class="avatar">
+                  <img src="${avatar}" />
+                </div>
+                <div class="username">${user.participant.name}</div>
+              </div>
+            </li>`;
+          } else {
+            const avatar = user.creator.avatar
+            ? './avatars/' + user.creator.avatar
+            : './images/nophoto.png';
+          generatedHtml += `<li onclick="getMessages('${user._id}', '${user.creator.name}')">
+              <div class="user">
+                <div class="avatar">
+                  <img src="${avatar}" />
+                </div>
+                <div class="username">${user.creator.name}</div>
+              </div>
+            </li>`;
+          }
+
+        });
+        generatedHtml += '</ul>';
+        findUsersElement.innerHTML = generatedHtml;
+        findUsersElement.style.display = 'block';
+      }
+    }
     </script>
   </body>
 </html>
