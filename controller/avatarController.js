@@ -11,7 +11,7 @@ function getAvatar(req, res, next) {
 
 	upload.any()(req, res, (err) => {
 		if (err) {
-			return res.status(500).json({ error: err.massage });
+			return res.status(500).json({ error: err });
 		}
 		next();
 	});
