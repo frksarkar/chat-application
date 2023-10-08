@@ -67,6 +67,7 @@
     <script>
 
       const form = document.querySelector('#chat-form');
+      const deleteConversation = document.querySelector('img[alt="Delete Conversation"]')
       const messageContainer = document.querySelector('#chat-message-list');
       const chatTitleContainer = document.querySelector('#conversation-partner');
       const loggedInUserId = '<%= loggedInUser.userId %>';
@@ -78,6 +79,7 @@
       const socket = io('<%= appUrl %>');
       // handle new/live incoming message from socket
       socket.on("new_message", data => {
+        console.log(data);
         // only respond if current conversation is open in any client
         if(data.message.conversation_id == current_conversation_id) {
           // message class
@@ -153,7 +155,7 @@
 
                   if(message.attachment && message.attachment.length > 0) {
                     message.attachment.forEach(attachment => {
-                      attachments += `<img src="./uploads/attachments/${attachment}" /> `;
+                      attachments += `<img src="./attachments/${attachment}" /> `;
                     });
                   }
 
@@ -211,6 +213,25 @@
         } else {
           sendMessageFailureToast.showToast();
         }
+      }
+
+      // delete the current message conversation;
+      deleteConversation.onclick = async function() {
+        const deleteConversationToast = Toastify({
+          text: "conversation deleted successfully",
+          duration: 1000,
+        });
+        const response = await fetch(`/inbox/conversation/${current_conversation_id}`, {
+          method: 'DELETE',
+        })
+
+        const result = await response.text();
+
+        deleteConversationToast.showToast();
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+
       }
       
     </script>
