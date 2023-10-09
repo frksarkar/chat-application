@@ -42,7 +42,6 @@ const redirectLoggedIn = function (req, res, next) {
 
 const requireRole = function (role) {
 	return function (req, res, next) {
-		console.log(req.user.role);
 		if (req.user.role && role.includes(req.user.role)) {
 			next();
 		} else {
