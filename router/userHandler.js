@@ -11,10 +11,16 @@ const {
 	userValidation,
 } = require('../middleware/common/validationField');
 const addUser = require('../controller/user/addUser');
-const { checkLogin } = require('../middleware/login/checkLogin');
+const { checkLogin, requireRole } = require('../middleware/login/checkLogin');
 const router = express.Router();
 
-router.get('/', decorateHtmlResponse('User'), checkLogin, getUser);
+router.get(
+	'/',
+	decorateHtmlResponse('User'),
+	checkLogin,
+	requireRole(['admin']),
+	getUser
+);
 
 router.post('/', getAvatar, validationField, userValidation, addUser);
 
